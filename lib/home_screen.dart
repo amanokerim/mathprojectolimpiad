@@ -8,7 +8,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TeXViewStyle style;
-  int n = 5;
+  int n = 0;
   TextEditingController _controller;
 
   @override
@@ -39,10 +39,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("n-nji derejeli önüm:"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text("Programma barada"),
+                content: Text(
+                  "Bu programma Mary şäheriniň 11-nji \"A\" synp okuwçysy Hommadow Begenç tarapyndan taýýarlandy.\n\nYlmy ýolbaşçy: Mary şäheriniň 1-nji orta mekdebiniň matematika mugallymy Allakowa Şasenem",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                actions: [
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text("Gizle"),
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
       ),
       body: Center(
         child: ListView(
           children: [
+            SizedBox(height: 20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -64,9 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     )),
                 FlatButton(
-                  onPressed: () => () => setState(
-                        () => n = int.parse(_controller.text),
-                      ),
+                  onPressed: () =>
+                      setState(() => n = int.parse(_controller.text)),
                   color: Theme.of(context).primaryColor,
                   child: Text(
                     "Hasapla",
@@ -78,18 +99,87 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            Expanded(
-              child: TeXView(
-                child: TeXViewColumn(
-                  children: [
-                    TeXViewDocument(
-                      r"<h3> \( (x^n)^{(n-1)} = n!x\)</h3>",
-                      style: style,
+            SizedBox(height: 20.0),
+            n <= 0
+                ? Center(
+                    child: Text(
+                      "n - natural sany giriziň",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
+                  )
+                : Expanded(
+                    child: TeXView(
+                      child: TeXViewColumn(
+                        children: [
+                          TeXViewDocument(
+                            r"<h3> $$(x^n)^{(n-1)} = n!x$$ $$ (x^ " +
+                                n.toString() +
+                                r")^{(" +
+                                (n - 1).toString() +
+                                r")} = " +
+                                n.toString() +
+                                r"!x$$ </h3>",
+                            style: style,
+                          ),
+                          TeXViewDocument(
+                            r"<h3> $$(x^n)^{(n+1)} = 0$$ $$ (x^ " +
+                                n.toString() +
+                                r")^{(" +
+                                (n + 1).toString() +
+                                r")} = 0$$ </h3>",
+                            style: style,
+                          ),
+                          TeXViewDocument(
+                            r"<h3> $$({1 \over x})^{(n)} = {(-1)}^n {n! \over x^{n+1}}$$ $$ ({1 \over x})^{( " +
+                                (n + 1).toString() +
+                                r")} = (-1)^{( " +
+                                n.toString() +
+                                r")} {" +
+                                n.toString() +
+                                r"! \over x ^ " +
+                                (n + 1).toString() +
+                                r"}$$ </h3>",
+                            style: style,
+                          ),
+                          TeXViewDocument(
+                            r"<h3> $$(a^x)^{(n)} = a^x ln^na$$ $$ (a^x)^ {(" +
+                                n.toString() +
+                                r")} = a^xln^" +
+                                n.toString() +
+                                r"a$$</h3>",
+                            style: style,
+                          ),
+                          TeXViewDocument(
+                            r"<h3> $$({lnx})^{(n)} = {(-1)}^{n-1} {(n-1)! \over x^n} $$ $$ ({lnx})^{( " +
+                                n.toString() +
+                                r")} = (-1)^{( " +
+                                (n - 1).toString() +
+                                r")} {" +
+                                (n - 1).toString() +
+                                r"! \over x ^ " +
+                                n.toString() +
+                                r"}$$ </h3>",
+                            style: style,
+                          ),
+                          TeXViewDocument(
+                            r"<h3> $$({log_ax})^{(n)} = {(-1)}^{n-1} {(n-1)! \over {x^n lna}} $$ $$ ({log_ax})^{( " +
+                                n.toString() +
+                                r")} = (-1)^{( " +
+                                (n - 1).toString() +
+                                r")} {" +
+                                (n - 1).toString() +
+                                r"! \over x ^ " +
+                                n.toString() +
+                                r" lna}$$ </h3>",
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+            SizedBox(height: 10.0),
           ],
         ),
       ),
